@@ -1,0 +1,672 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    /* overflow:hidden; */
+}
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(243, 156, 18, 0.9) 0%, rgba(239, 68, 68, 0.7) 100%);
+    border-radius: 99px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(255, 180, 50, 1) 0%, rgba(239, 68, 68, 1) 100%);
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+    background-clip: padding-box;
+}
+
+/* For Firefox */
+/* * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(243, 156, 18, 0.9) transparent;
+} */
+:root {
+    --primary:        rgba(74, 144, 226, 1);
+    --secondary:      rgba(80, 200, 120, 1);
+    --accent:         rgba(243, 156, 18, 1);
+    --dark:           rgba(44, 62, 80, 1);
+    --light:          rgba(236, 240, 241, 1);
+    --success:        rgba(39, 174, 96, 1);
+    --purple-start:   rgba(139, 92, 246, 1);
+    --purple-mid:     rgba(167, 139, 250, 1);
+    --purple-end:     rgba(139, 92, 246, 1);
+}
+
+.container {
+    top: 0%;
+    min-height: auto;
+    width: 100%;
+    background: linear-gradient(135deg, var(--purple-start), var(--purple-mid), var(--purple-end));
+    color: rgba(255, 255, 255, 1);
+    display: block;
+    position: absolute;
+    left: 0%;
+}
+.left {
+    left: 0%;
+    top: 0%;
+    width: 50%;
+    height: 100%;
+}
+
+.fade {
+    position: absolute;
+    font-size: 1.3rem;
+    top: 1rem;
+    right: 1rem;
+    left: auto;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 1);
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 0.5rem 1rem;
+    line-height: 1.4;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+#greeting {
+    opacity: 0;
+    transition: opacity 1s ease, color 3s ease;
+    font-size: 26px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    margin-top: 20px;
+    color: rgba(233, 213, 255, 1);
+}
+
+#greeting.show {
+    opacity: 1;
+    color: rgba(243, 232, 255, 1);
+    animation: colorChange 15s linear forwards;
+}
+
+#greeting.hide {
+    opacity: 0;
+}
+
+@keyframes colorChange {
+    0%   { color: rgba(243, 232, 255, 1); }
+    10%  { color: rgba(255, 255, 255, 1); }
+    20%  { color: rgba(243, 232, 255, 1); }
+    30%  { color: rgba(255, 255, 255, 1); }
+    40%  { color: rgba(255, 255, 255, 1); }
+    50%  { color: rgba(243, 232, 255, 1); }
+    60%  { color: rgba(255, 255, 255, 1); }
+    70%  { color: rgba(243, 232, 255, 1); }
+    80%  { color: rgba(255, 255, 255, 1); }
+    90%  { color: rgba(255, 255, 255, 1); }
+    100% { color: rgba(243, 232, 255, 1); }
+}
+
+/* ── School header ── */
+.school {
+    position: relative;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-family: 'Inter', sans-serif;
+    color: rgba(255, 255, 255, 1);
+    text-shadow: 0 1px 8px rgba(139, 92, 246, 0.4);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(167, 139, 250, 0.12) 50%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-bottom: 2.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    display: block;
+    width: fit-content;
+    margin: 0 auto 0.5rem auto;
+    padding: 0.75rem 2.5rem;
+}
+
+.school-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Field row layout ── */
+.field-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: nowrap;
+    padding: 0.6rem 1.4rem;
+    margin-top: 0.5rem;
+}
+
+.field-row:first-of-type {
+    margin-top: 3.5rem;
+}
+
+/* ── Base shared style for all controls ── */
+.subject,
+.input {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 1);
+    border: 1.5px solid rgba(255, 255, 255, 0.30);
+    border-radius: 10px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+/* ── Hover state ── */
+.subject:hover,
+.input:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.50);
+}
+
+/* ── Focus state ── */
+.subject:focus,
+.input:focus {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.70);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.40);
+}
+
+/* ── Placeholder ── */
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+}
+.name::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 400;
+    text-transform: capitalize;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+}
+
+/* ── Subject dropdown ── */
+.subject {
+    min-width: 75px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    font-family: 'Montserrat', sans-serif;
+    padding-right: 2rem;
+    text-align: left;
+}
+
+.name {
+    min-width: 90px;
+    cursor: grabbing;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.40);
+    padding-right: 2rem;
+    text-align: center;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 1);
+    border: 1.5px solid rgba(255, 255, 255, 0.30);
+    border-radius: 10px;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    margin-left: 100px;
+}
+
+.subject option {
+    background-color: rgba(91, 33, 182, 1);
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 1);
+}
+
+/* ── Class select option styling ── */
+#class-select option {
+    background-color: rgba(91, 33, 182, 1);
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 1);
+}
+
+/* ── Score inputs ── */
+.input {
+    font-family: 'Raleway', sans-serif;
+    width: 75px;
+}
+
+/* ── Total field (read-only) ── */
+.total {
+    width: 65px;
+    background: rgba(139, 92, 246, 0.25);
+    border-color: rgba(167, 139, 250, 0.50);
+    color: rgba(233, 213, 255, 1);
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    cursor: crosshair;
+    text-align: center;
+}
+
+/* ── Remove number spinners ── */
+.input[type="number"]::-webkit-inner-spin-button,
+.input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* ── Utility widths ── */
+.width1 {
+    width: auto;
+}
+
+.width {
+    width: 20%;
+}
+
+/* ── Right panel — stacks table then buttons vertically ── */
+.right {
+    right: 0%;
+    top: 0%;
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;      /* ← table on top, buttons below */
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;                   /* ← gap between table and btn-row */
+    padding: 1.5rem 1rem;        /* ← breathing room */
+    overflow-y: auto;            /* ← scroll if content is tall */
+}
+
+/* ── Result table ── */
+.table {
+    width: auto;
+    height: auto;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(167, 139, 250, 0.12) 50%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 2px solid rgba(255, 255, 255, 0.50);
+    border-radius: 16px;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+}
+
+/* ── Table header cells ── */
+.option1 {
+    color: rgba(233, 213, 255, 1);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    padding: 0.75rem 1.2rem;
+    text-align: center;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.25);
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+    white-space: nowrap;
+}
+
+/* ── Remove divider on last header cell ── */
+.option1:last-child {
+    border-right: none;
+}
+
+/* ── Table data cells ── */
+.option,
+.option2 {
+    color: rgba(255, 255, 255, 1);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.65rem 1.2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    white-space: nowrap;
+}
+
+/* ── Remove divider on last data cell ── */
+.option:last-child,
+.option2:last-child {
+    border-right: none;
+}
+
+/* ── Remove bottom border on last row ── */
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ── Subtle hover on rows ── */
+.table tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* ═══════════════════════ PRINT / DOWNLOAD BUTTONS ═══════════════════════ */
+.print-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 1);
+    border: 1.5px solid rgba(255, 255, 255, 0.40);
+    border-radius: 10px;
+    padding: 0.45rem 1.2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease,
+                box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.print-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.70);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.40);
+    transform: translateY(-1px);
+}
+
+.print-btn:active {
+    transform: translateY(0);
+}
+
+/* ── SVG icon inside download button ── */
+.btn-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+/* ── Button row — sits below the result table ── */
+.btn-row {
+    display: flex;
+    flex-direction: row;
+    gap: 0.65rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* footer */
+.footer{
+      position: relative;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-family: 'Inter', sans-serif;
+   color: rgba(255, 255, 255, 1);
+    text-shadow: 0 1px 8px rgba(139, 92, 246, 0.4);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.18) 0%,
+        rgba(167, 139, 250, 0.12) 50%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-bottom: 2.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    display: block;
+    width: fit-content;
+margin: 2rem auto 2rem auto;
+    padding: 0.75rem 2.5rem;   
+}
+/* ═══════════════════════ RESPONSIVE ═══════════════════════ */
+
+/* ── Tablet (≤ 900px): stack left and right panels ── */
+@media (max-width: 900px) {
+    .container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 2rem;
+    }
+
+    .left {
+        position: relative;
+        width: 100%;
+        height: auto;
+        left: unset;
+        top: unset;
+    }
+
+    .right {
+        position: relative;
+        width: 100%;
+        height: auto;
+        right: unset;
+        top: unset;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1.5rem 1rem 2rem;
+        overflow-y: visible;
+    }
+}
+
+/* ── Mobile (≤ 600px): tighten spacing and shrink elements ── */
+@media (max-width: 600px) {
+    .school {
+        font-size: 1.1rem;
+        padding: 0.6rem 1.2rem;
+    }
+    .footer{
+        font-size: 0.93rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    .school-wrapper {
+        padding-top: 1rem;
+    }
+
+    .field-row {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .field-row:first-of-type {
+        margin-top: 2rem;
+    }
+
+    .subject,
+    .input {
+        font-size: 0.78rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .subject {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    .input {
+        width: calc(33% - 0.4rem);
+        min-width: 0;
+        flex: 1;
+    }
+
+    .total {
+        width: 100%;
+        text-align: center;
+    }
+
+    .name {
+        margin-left: 0;
+        width: 100%;
+        min-width: unset;
+    }
+
+    /* Buttons stack vertically on small screens */
+    .btn-row {
+        flex-direction: column;
+        width: 100%;
+        padding: 0 0.75rem;
+    }
+
+    .print-btn {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .table {
+        width: 100%;
+        font-size: 0.75rem;
+    }
+
+    .option1,
+    .option,
+    .option2 {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.72rem;
+    }
+
+    .fade {
+        font-size: 1rem;
+        white-space: normal;
+        right: 0.5rem;
+        left: 0.5rem;
+        top: 0.5rem;
+    }
+}
+
+/* ── Very small screens (≤ 380px) ── */
+@media (max-width: 380px) {
+    .school {
+        font-size: 0.95rem;
+        padding: 0.5rem 0.8rem;
+    }
+    .footer {
+        font-size: 0.65rem;
+        padding: 0.5rem 0.8rem;
+    }
+
+    .option1,
+    .option,
+    .option2 {
+        padding: 0.4rem 0.4rem;
+        font-size: 0.65rem;
+        letter-spacing: 0;
+    }
+
+    .input {
+        font-size: 0.72rem;
+    }
+}
+
+/* ═══════════════════════ PRINT STYLES ═══════════════════════ */
+@media print {
+
+    /* ── 1. Blank the whole page first ── */
+    body * { visibility: hidden; }
+
+    /* ── 2. Reveal only the result table ── */
+    #print-area,
+    #print-area * { visibility: visible; }
+
+    /* ── 3. Ensure non-essential UI is gone ── */
+    .preloader,
+    .btn-row,
+    #greeting,
+    #rows-container,
+    .custom-alert { display: none !important; }
+
+    /* ── 4. Centre the table on the printed page ── */
+    #print-area {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: auto;
+    }
+
+    /* ── 5. Clean table colours for paper ── */
+    .table {
+        width: auto !important;
+        background: white !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 1.5px solid #999 !important;
+        border-radius: 8px !important;
+        box-shadow: none !important;
+    }
+
+    .option1 {
+        color: #111 !important;
+        border-color: #999 !important;
+        background: #f0f0f0 !important;
+    }
+
+    .option, .option2 {
+        color: #111 !important;
+        border-color: #ddd !important;
+    }
+}

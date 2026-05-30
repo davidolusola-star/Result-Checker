@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Checker</title>
+    <link rel="shortcut icon" href="image/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="vendor/font-family/Montserrat/montserrat.css">
+    <link rel="stylesheet" href="vendor/font-family/Raleway/raleway.css">
+    <link rel="stylesheet" href="vendor/font-family/Inter/inter.css">
+    <link rel="stylesheet" href="css/preloader.css">
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-block">
+            <div class="preloader-icon">
+                <span class="spinner-ring"></span>
+                <img src="image/preloader.png" alt="BLUE PIXEL RESULT PLATFORM Loading..."
+                     onerror="this.style.display='none'">
+            </div>
+            <span class="loading-text">BLUE PIXEL COLLEGE</span>
+        </div>
+    </div>
+    <!-- Preloader End -->
+
+    <div class="container">
+
+        <!-- School name -->
+        <div class="school-wrapper">
+            <h1 class="school">Blue Pixel International College</h1>
+        </div>
+
+        <!-- Greeting -->
+        <div id="greeting" class="fade"></div>
+
+        <!-- Input rows injected here by JS -->
+        <div class="left" id="rows-container">
+            <input type="text" id="student-name" class="name" placeholder="Student Name">
+            <select class="name" id="class-select">
+                <option value="" disabled selected>Select Class</option>
+                <option value="JSS1">JSS 1</option>
+                <option value="JSS2">JSS 2</option>
+                <option value="JSS3">JSS 3</option>
+                <option value="SS1">SS 1</option>
+                <option value="SS2">SS 2</option>
+                <option value="SS3">SS 3</option>
+            </select>
+        </div>
+
+        <div class="right">
+
+            <!-- ─────────── Only this div is shown when printing / downloading ─────────── -->
+            <div id="print-area">
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th class="option1" colspan="2">Student Name</th>
+                            <th class="option1" colspan="2">Student Class</th>
+                            <th class="option1" colspan="1">Session</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td colspan="2" style="text-transform: capitalize; text-align: center;" class="option" id="stuname"></td>
+                            <td colspan="2" class="option" id="stuclass" style="text-transform: uppercase; text-align: center;"></td>
+                            <td class="option" colspan="1" style="text-transform: uppercase; text-align: center;" id="year"></td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <th class="option1">SUBJECT</th>
+                            <th class="option1">TOTAL</th>
+                            <th class="option1">AVG %</th>
+                            <th class="option1">REMARKS</th>
+                            <th class="option1">GRADE</th>
+                        </tr>
+                    </thead>
+                    <!-- Table rows injected here by JS -->
+                    <tbody id="table-body"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="option1" name="overall" colspan="2">OVERALL</td>
+                            <td id="overall-avg" name="overall-avg" class="option1"></td>
+                            <td id="overall-remark" name="overall-remark" class="option1"></td>
+                            <td id="overall-grade" name="overall-grade" class="option1"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- ─────────── Action buttons sit BELOW the table ─────────── -->
+            <div class="btn-row">
+                <button type="button" class="print-btn" onclick="handlePrint()">🖨️ Print Result</button>
+                <button type="button" id="downloadBtn" onclick="downloadCard()" class="print-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg> Download Result
+                </button>
+            </div>
+
+        </div>
+ <footer class="footer">
+        <div class="footer-text">
+            <span>BPIC</span><span style="text-transform: capitalize;"> Copyright &copy; result platform.All right reserved <span id="years"></span></span>
+        </div>
+    </footer>
+    </div>
+   
+    <script src="js/html2canvas.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/index.js"></script>
+    <script>
+        document.getElementById('years').textContent = new Date().getFullYear();
+        function downloadCard() {
+
+            // ── 1. Validate before doing anything ─────────────────────────
+            if (!validateTable()) return;
+
+            if (typeof html2canvas === 'undefined') {
+                showAlert('html2canvas.min.js not found.', 'error', 3000);
+                return;
+            }
+
+            // ── 2. Generate unique filename: "BPIC" + 10 random digits ────
+            var digits = '';
+            for (var d = 0; d < 10; d++) digits += Math.floor(Math.random() * 10);
+            var FILENAME = 'BPIC' + digits + 'DSolt' + '.png';
+
+            var btn   = document.getElementById('downloadBtn');
+            var table = document.querySelector('.table');
+
+            btn.disabled  = true;
+            btn.innerText = 'Please wait…';
+
+            // ── 3. Capture the table ──────────────────────────────────────
+            html2canvas(table, {
+                scale: 3,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#8b5cf6',   /* purple to match the table theme */
+                logging: false
+            }).then(function (tableCanvas) {
+
+                // ── 4. Centre the captured table on a clean white canvas ──
+                var pad = 80;
+                var fc  = document.createElement('canvas');
+                fc.width  = tableCanvas.width  + pad * 2;
+                fc.height = tableCanvas.height + pad * 2;
+                var ctx = fc.getContext('2d');
+
+                /* White page background */
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, fc.width, fc.height);
+
+                /* Subtle shadow then the table image */
+                ctx.shadowColor   = 'rgba(0, 0, 0, 0.15)';
+                ctx.shadowBlur    = 28;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 6;
+                ctx.drawImage(tableCanvas, pad, pad);
+
+                // ── 5. Trigger download ───────────────────────────────────
+                var a = document.createElement('a');
+                a.href     = fc.toDataURL('image/png');
+                a.download = FILENAME;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                btn.disabled  = false;
+                btn.innerHTML =
+                    '<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"' +
+                    ' stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+                    '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>' +
+                    '<polyline points="7 10 12 15 17 10"/>' +
+                    '<line x1="12" y1="15" x2="12" y2="3"/></svg> Download Result';
+
+            }).catch(function (e) {
+                showAlert('Download failed: ' + e.message, 'error', 3000);
+                btn.disabled  = false;
+                btn.innerText = 'Download Result';
+            });
+        }
+    </script>
+</body>
+</html>
